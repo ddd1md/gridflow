@@ -40,10 +40,10 @@ External Sources - погода, календарь, исторические д
 
 ## Первый сквозной путь
 
-1. FastAPI и Postgres: одноустройство ->
+1. FastAPI и Postgres: одно устройство ->
 2. Генератор показаний ->
 3. Kafka, один топик ->
-4. Spark Streaming пишет Bronze в Iceberg ->
+4. Spark Streaming дописывает Iceberg-таблицу Bronze, а её Parquet и метаданные лежат в MinIO ->
 5. Spark Batch чистит и снимает дубли ->
 6. Spark считает потребление по часам ->
 7. Одна таблица в ClickHouse
@@ -51,3 +51,8 @@ External Sources - погода, календарь, исторические д
 ## Выделение ресурсов на ВМ
 
 [ADR-machine-budget](./docs/decisions/001-machine-budget.md)
+
+## Запуск
+
+Профили сразу не поднимаются.
+Spark и Trino не работают одновременно, второй Spark не стартует, пока жив первый
