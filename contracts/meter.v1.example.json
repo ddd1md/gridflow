@@ -1,0 +1,11 @@
+{
+    "event_id": "cac8c02a-9363-43c1-9c55-f1320f0268a5",
+    "schema_version": 1,
+    "device_id": 123,
+    "event_time": "2026-11-14T12:00:00Z",
+    "ingest_time": "2026-11-14T12:00:00Z",
+    "interval_kwh": 123.123,
+    "voltage_v": 123.123,
+    "current_a": 123.123,
+    "frequency_hz": 123.123
+}

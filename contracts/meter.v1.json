@@ -1,0 +1,49 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+        "event_id": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "schema_version": {
+            "type": "integer",
+            "const": 1
+        },
+        "device_id": {
+            "type": "integer"
+        },
+        "event_time": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "ingest_time": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "interval_kwh": {
+            "type": "number"
+        },
+        "voltage_v": {
+            "type": "number"
+        },
+        "current_a": {
+            "type": "number"
+        },
+        "frequency_hz": {
+            "type": "number"
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "event_id",
+        "schema_version",
+        "device_id",
+        "event_time",
+        "ingest_time",
+        "interval_kwh",
+        "voltage_v",
+        "current_a",
+        "frequency_hz"
+    ]
+}
