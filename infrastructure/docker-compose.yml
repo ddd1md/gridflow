@@ -39,6 +39,26 @@ services:
     tty: true
     stdin_open: true
 
+  backend:
+    image: gridflow-backend
+    container_name: backend_container
+    ports:
+      - ${BACKEND_PORTS}
+    build:
+      context: ../backend
+    depends_on:
+      postgres:
+          condition: service_healthy
+          restart: true
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+
 volumes:
   pgdata:
     driver: local
