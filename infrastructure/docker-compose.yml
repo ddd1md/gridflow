@@ -42,6 +42,10 @@ services:
   backend:
     image: gridflow-backend
     container_name: backend_container
+    env_file: "../.env"
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: "5432"
     ports:
       - ${BACKEND_PORTS}
     build:
