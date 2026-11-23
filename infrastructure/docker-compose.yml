@@ -110,6 +110,35 @@ services:
       command: server /data --console-address ":9001"
       user: "0:0"
 
+  iceberg-rest:
+    image: iceberg-rest
+    container_name: iceberg_rest_container
+    build: .
+    ports:
+      - "127.0.0.1:8181:8181"
+    environment:
+      CATALOG_CATALOG_NAME: gridflow
+      CATALOG_WAREHOUSE: s3://gridflow/warehouse
+      CATALOG_URI: jdbc:postgresql://postgres:5432/iceberg_catalog
+      CATALOG_JDBC_USER: ${POSTGRES_USER}
+      CATALOG_JDBC_PASSWORD: ${POSTGRES_PASSWORD}
+      CATALOG_IO__IMPL: org.apache.iceberg.aws.s3.S3FileIO
+      CATALOG_S3_ENDPOINT: http://minio:9000
+      CATALOG_S3_PATH__STYLE__ACCESS: "true"
+      CATALOG_S3_ACCESS__KEY__ID: ${MINIO_USER}
+      CATALOG_S3_SECRET__ACCESS__KEY: ${MINIO_PASSWORD}
+      AWS_REGION: us-east-1
+    deploy:
+      resources:
+        limits:
+          memory: 768M
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio:
+        condition: service_started
+    restart: unless-stopped
+
 volumes:
   pgdata:
     driver: local
