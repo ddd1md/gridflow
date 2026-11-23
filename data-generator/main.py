@@ -2,9 +2,24 @@ import argparse
 import datetime
 import json
 import uuid
+from confluent_kafka import Producer
 
+
+conf = {
+    "bootstrap.servers": "localhost:9094",
+    "acks": "all",
+}
 
 CUSTOM_NAMESPACE = uuid.UUID("3b12f1df-5232-4804-897e-917bf397618a")
+
+producer = Producer(conf)
+
+
+def delivery_callback(err, msg):
+    if err:
+        print(f"Ошибка доставки: {err}")
+    else:
+        print(f"Доставлено в {msg.topic()} [партиция {msg.partition()}] @ {msg.offset()}")
 
 
 def main(device_id=None, date=None):
@@ -36,8 +51,17 @@ def main(device_id=None, date=None):
             "frequency_hz": frequncy_hz
         }
 
-        print(json.dumps(generate_dict))
+        # print(json.dumps(generate_dict))
+        producer.produce(
+            topic="gridflow.telemetry.meters.v1",
+            key=str(device_id),
+            value=json.dumps(generate_dict),
+            callback=delivery_callback,
+        )
+
         dt_obj += step
+
+    producer.flush()
 
 
 if __name__ == "__main__":
