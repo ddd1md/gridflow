@@ -139,6 +139,24 @@ services:
         condition: service_started
     restart: unless-stopped
 
+  spark:
+    image: apache/spark:3.5.9-java17
+    deploy:
+      resources:
+        limits:
+          memory: 4096M
+    environment:
+      AWS_ACCESS_KEY_ID: ${MINIO_USER}
+      AWS_SECRET_ACCESS_KEY: ${MINIO_PASSWORD}
+      AWS_REGION: us-east-1
+    volumes:
+      - ./spark-defaults.conf:/opt/spark/conf/spark-defaults.conf:ro
+    depends_on:
+      minio:
+        condition: service_started
+      iceberg-rest:
+        condition: service_started
+
 volumes:
   pgdata:
     driver: local
