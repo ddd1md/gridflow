@@ -154,6 +154,7 @@ services:
     volumes:
       - ./spark-defaults.conf:/opt/spark/conf/spark-defaults.conf:ro
       - ../spark/bronze_stream.py:/opt/spark/work-dir/bronze_stream.py:ro
+      - ./ivy-cache:/tmp/.ivy2
     depends_on:
       minio:
         condition: service_started
