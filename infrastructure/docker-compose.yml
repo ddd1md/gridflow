@@ -140,7 +140,9 @@ services:
     restart: unless-stopped
 
   spark:
-    image: apache/spark:3.5.9-java17
+    image: apache/spark:3.5.9-java17-python3
+    ports:
+      - 127.0.0.1:4040:4040
     deploy:
       resources:
         limits:
@@ -151,11 +153,16 @@ services:
       AWS_REGION: us-east-1
     volumes:
       - ./spark-defaults.conf:/opt/spark/conf/spark-defaults.conf:ro
+      - ../spark/bronze_stream.py:/opt/spark/work-dir/bronze_stream.py:ro
     depends_on:
       minio:
         condition: service_started
       iceberg-rest:
         condition: service_started
+      broker-kafka:
+        condition: service_started
+    restart: unless-stopped
+    command: ["/opt/spark/bin/spark-submit", "/opt/spark/work-dir/bronze_stream.py"]
 
 volumes:
   pgdata:
